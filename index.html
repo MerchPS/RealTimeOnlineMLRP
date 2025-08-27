@@ -312,7 +312,7 @@ async function fetchData() {
 function updateServerInfo(data) {
   if (data && data.Data) {
     serverNameEl.textContent = data.Data.hostname;
-    maxPlayersEl.textContent = data.Data.info.maxClients || 32;
+    maxPlayersEl.textContent = data.Data.sv_maxclients || 32;
   }
 }
 
