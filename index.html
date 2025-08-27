@@ -3,58 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FiveM Player Monitor</title>
+<title>MotionLife Player Monitor</title>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-  body { font-family: Arial; background: #121212; color: #fff; padding: 20px; }
-  h1 { color: #00e676; }
-  #player-list { margin-top: 10px; }
-  .player { padding: 5px; border-bottom: 1px solid #444; }
-  input { padding: 10px; width: 100%; margin-bottom: 10px; }
+  .fade-in { animation: fadeIn 0.6s ease-in-out; }
+  @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 </style>
 </head>
-<body>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center justify-center">
 
-<h1>MotionLife Server Monitor</h1>
-<p>Total Online: <span id="online-count">0</span></p>
-<input type="text" id="search" placeholder="Cari player...">
-<div id="player-list"></div>
+<!-- Loading Screen -->
+<div id="loading-screen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
+  <div class="text-center">
+    <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-green-400 mx-auto"></div>
+    <p class="mt-4 text-green-400 text-xl font-bold">Loading Data...</p>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="w-full max-w-4xl p-4">
+  <div class="text-center mb-6">
+    <h1 class="text-4xl font-extrabold text-green-400">MotionLife Server Monitor</h1>
+    <p class="text-gray-400 mt-2">Pantau pemain secara real-time</p>
+  </div>
+
+  <!-- Info Bar -->
+  <div class="bg-gray-800 p-4 rounded-lg flex justify-between items-center mb-4">
+    <div class="text-lg">Online: <span id="online-count" class="text-green-400 font-bold">0</span></div>
+    <div class="text-sm text-gray-400">Refresh dalam: <span id="refresh-timer" class="font-bold">5</span>s</div>
+  </div>
+
+  <!-- Search Bar -->
+  <input type="text" id="search" placeholder="Cari player..." 
+    class="w-full p-3 rounded-lg bg-gray-800 border border-gray-700 focus:border-green-400 focus:outline-none text-white mb-4">
+
+  <!-- Player List -->
+  <div id="player-list" class="bg-gray-800 p-4 rounded-lg shadow-lg grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto"></div>
+</div>
 
 <script>
-const serverID = "5j433z"; // ID server
+const serverID = "5j433z"; // ID server kamu
 const apiURL = `https://servers-frontend.fivem.net/api/servers/single/${serverID}`;
+const refreshInterval = 5; // Detik
+let countdown = refreshInterval;
+
+// Ambil elemen
+const loadingScreen = document.getElementById("loading-screen");
+const onlineCountEl = document.getElementById("online-count");
+const refreshTimerEl = document.getElementById("refresh-timer");
+const playerListEl = document.getElementById("player-list");
 
 async function fetchData() {
   try {
     const res = await fetch(apiURL);
     const data = await res.json();
-    
+
+    // Update data
     const players = data.Data.players;
     const onlineCount = data.Data.clients;
-    
-    document.getElementById("online-count").innerText = onlineCount;
-    
-    const listContainer = document.getElementById("player-list");
-    listContainer.innerHTML = "";
-    
+    onlineCountEl.textContent = onlineCount;
+
+    // Render list pemain
+    playerListEl.innerHTML = "";
     players.forEach(player => {
       const div = document.createElement("div");
-      div.className = "player";
+      div.className = "fade-in bg-gray-700 p-3 rounded-lg text-center text-white font-semibold";
       div.textContent = player.name;
-      listContainer.appendChild(div);
+      playerListEl.appendChild(div);
     });
-    
+
+    // Hilangkan loading screen setelah load pertama
+    loadingScreen.style.display = "none";
+
   } catch (error) {
     console.error("Gagal mengambil data:", error);
   }
 }
 
-setInterval(fetchData, 5000);
+function startCountdown() {
+  countdown = refreshInterval;
+  refreshTimerEl.textContent = countdown;
+  const timer = setInterval(() => {
+    countdown--;
+    refreshTimerEl.textContent = countdown;
+    if (countdown <= 0) {
+      clearInterval(timer);
+      fetchData();
+      startCountdown();
+    }
+  }, 1000);
+}
+
 fetchData();
+startCountdown();
 
 // Fitur Search
 document.getElementById("search").addEventListener("input", function() {
   const filter = this.value.toLowerCase();
-  const players = document.querySelectorAll(".player");
+  const players = document.querySelectorAll("#player-list div");
   
   players.forEach(player => {
     if (player.textContent.toLowerCase().includes(filter)) {
