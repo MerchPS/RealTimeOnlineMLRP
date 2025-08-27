@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FiveM Player Monitor</title>
+<style>
+  body { font-family: Arial; background: #121212; color: #fff; padding: 20px; }
+  h1 { color: #00e676; }
+  #player-list { margin-top: 10px; }
+  .player { padding: 5px; border-bottom: 1px solid #444; }
+  input { padding: 10px; width: 100%; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<h1>MotionLife Server Monitor</h1>
+<p>Total Online: <span id="online-count">0</span></p>
+<input type="text" id="search" placeholder="Cari player...">
+<div id="player-list"></div>
+
+<script>
+const serverID = "5j433z"; // ID server
+const apiURL = `https://servers-frontend.fivem.net/api/servers/single/${serverID}`;
+
+async function fetchData() {
+  try {
+    const res = await fetch(apiURL);
+    const data = await res.json();
+    
+    const players = data.Data.players;
+    const onlineCount = data.Data.clients;
+    
+    document.getElementById("online-count").innerText = onlineCount;
+    
+    const listContainer = document.getElementById("player-list");
+    listContainer.innerHTML = "";
+    
+    players.forEach(player => {
+      const div = document.createElement("div");
+      div.className = "player";
+      div.textContent = player.name;
+      listContainer.appendChild(div);
+    });
+    
+  } catch (error) {
+    console.error("Gagal mengambil data:", error);
+  }
+}
+
+setInterval(fetchData, 5000);
+fetchData();
+
+// Fitur Search
+document.getElementById("search").addEventListener("input", function() {
+  const filter = this.value.toLowerCase();
+  const players = document.querySelectorAll(".player");
+  
+  players.forEach(player => {
+    if (player.textContent.toLowerCase().includes(filter)) {
+      player.style.display = "";
+    } else {
+      player.style.display = "none";
+    }
+  });
+});
+</script>
+
+</body>
+</html>
