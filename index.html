@@ -198,7 +198,7 @@ function checkMaintenanceStatus(onlineCount) {
   let isMaintenanceTime = currentTime >= maintenanceStart;
   
   // Jika sudah lewat dari jam maintenance, periksa apakah online count > 1
-  if (isMaintenanceTime && onlineCount > 1) {
+  if (isMaintenanceTime && onlineCount > 5) {
     isMaintenanceTime = false;
   }
   
