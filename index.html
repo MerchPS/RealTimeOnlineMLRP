@@ -5,6 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MotionLife Player Monitor</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        animation: {
+          'float': 'float 6s ease-in-out infinite',
+          'glow': 'glow 2s ease-in-out infinite alternate',
+          'fadeIn': 'fadeIn 0.6s ease-in-out forwards',
+          'slideIn': 'slideIn 0.5s ease-out forwards',
+          'pulse-strong': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        },
+        keyframes: {
+          float: {
+            '0%, 100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(-10px)' },
+          },
+          glow: {
+            '0%': { boxShadow: '0 0 5px #10B981, 0 0 10px #10B981' },
+            '100%': { boxShadow: '0 0 15px #10B981, 0 0 30px #10B981' },
+          },
+          fadeIn: {
+            '0%': { opacity: '0' },
+            '100%': { opacity: '1' },
+          },
+          slideIn: {
+            '0%': { transform: 'translateY(20px)', opacity: '0' },
+            '100%': { transform: 'translateY(0)', opacity: '1' },
+          }
+        }
+      }
+    }
+  }
+</script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -14,6 +47,7 @@
   body {
     margin: 0;
     overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
   /* Custom scrollbar */
@@ -47,11 +81,6 @@
   .maintenance-banner {
     background: linear-gradient(90deg, #F59E0B, #EF4444);
     animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0% { opacity: 0.8; }
-    50% { opacity: 1; }
-    100% { opacity: 0.8; }
   }
   
   .server-card {
@@ -92,16 +121,6 @@
     100% { background-position: -200% 0; }
   }
   
-  .floating {
-    animation: float 6s ease-in-out infinite;
-  }
-  
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-  }
-  
   .gradient-bg {
     background: linear-gradient(-45deg, #0f172a, #111827, #1e293b, #1f2937);
     background-size: 400% 400%;
@@ -112,33 +131,6 @@
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-  }
-  
-  .slide-in-right {
-    animation: slideInRight 0.5s forwards;
-  }
-  
-  @keyframes slideInRight {
-    from { transform: translateX(100px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  
-  .slide-in-left {
-    animation: slideInLeft 0.5s forwards;
-  }
-  
-  @keyframes slideInLeft {
-    from { transform: translateX(-100px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-  
-  .zoom-in {
-    animation: zoomIn 0.5s forwards;
-  }
-  
-  @keyframes zoomIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
   }
   
   .typewriter {
@@ -185,48 +177,226 @@
     opacity: 1;
   }
   
-  .hamburger {
-    display: none;
-    cursor: pointer;
+  .holographic-effect {
+    background: linear-gradient(125deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+    background-size: 200% 200%;
+    animation: holographic 3s ease infinite;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  @keyframes holographic {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .holographic-effect::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(255,255,255,0));
+    transform: rotate(30deg);
+    pointer-events: none;
+  }
+  
+  .cyber-border {
+    position: relative;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+  }
+  
+  .cyber-border::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin: -2px;
+    border-radius: inherit;
+    background: linear-gradient(45deg, #10B981, #3B82F6, #10B981);
+    animation: border-flow 3s linear infinite;
+    background-size: 200% 200%;
+  }
+  
+  @keyframes border-flow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  .pixel-corners {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .pixel-corners::before,
+  .pixel-corners::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #10B981;
+    z-index: 2;
+  }
+  
+  .pixel-corners::before {
+    top: 0;
+    left: 0;
+    box-shadow: 0 0 5px #10B981;
+  }
+  
+  .pixel-corners::after {
+    bottom: 0;
+    right: 0;
+    box-shadow: 0 0 5px #10B981;
+  }
+  
+  .scanline {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .scanline::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(16, 185, 129, 0.3), transparent);
+    animation: scan 2s linear infinite;
+    pointer-events: none;
+  }
+  
+  @keyframes scan {
+    0% { top: -20px; }
+    100% { top: 100%; }
+  }
+  
+  .matrix-rain {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.1;
+  }
+  
+  .glitch-effect {
+    position: relative;
+  }
+  
+  .glitch-effect::before,
+  .glitch-effect::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+  
+  .glitch-effect::before {
+    animation: glitch-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+    color: #10B981;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-2px, -2px);
+  }
+  
+  .glitch-effect::after {
+    animation: glitch-animation 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse infinite;
+    color: #3B82F6;
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+  }
+  
+  @keyframes glitch-animation {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+  
+  .terminal-text {
+    font-family: 'Courier New', monospace;
+    color: #10B981;
+    text-shadow: 0 0 5px #10B981;
+  }
+  
+  .cyber-button {
+    background: linear-gradient(45deg, #10B981, #3B82F6);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  
+  .cyber-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+  }
+  
+  .cyber-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to bottom right, rgba(255,255,255,0.2), transparent);
+    transform: rotate(45deg);
+    transition: all 0.3s;
+  }
+  
+  .cyber-button:hover::before {
+    transform: rotate(45deg) translate(50px, 50px);
   }
   
   @media (max-width: 768px) {
-    .hamburger {
-      display: block;
+    .container {
+      padding: 10px;
     }
     
-    .nav-menu {
-      position: fixed;
-      top: 0;
-      right: -300px;
-      width: 300px;
-      height: 100vh;
-      background: #1F2937;
-      transition: all 0.3s ease;
-      z-index: 100;
+    .server-card {
+      padding: 15px;
     }
     
-    .nav-menu.active {
-      right: 0;
+    .player-grid {
+      grid-template-columns: 1fr 3fr 1fr;
     }
   }
 </style>
 </head>
-<body class="gradient-bg text-white min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+<body class="gradient-bg text-white min-h-screen flex flex-col items-center justify-start p-4 relative overflow-hidden">
 
 <!-- Animated Background -->
 <div id="particles-js"></div>
+<canvas id="matrixRain" class="matrix-rain"></canvas>
 
 <!-- Loading Screen -->
 <div id="loading-screen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
   <div class="text-center">
-    <div class="floating">
+    <div class="animate-float">
       <svg class="animate-spin h-16 w-16 text-green-400 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
       </svg>
     </div>
-    <p class="mt-4 text-green-400 text-xl font-bold typewriter">Loading Server Data...</p>
+    <p class="mt-4 text-green-400 text-xl font-bold typewriter">Initializing Server Connection...</p>
   </div>
 </div>
 
@@ -235,25 +405,25 @@
   <i class="fas fa-sync-alt mr-2"></i> Data diperbarui
 </div>
 
-<!-- Maintenance Banner -->
-<div id="maintenance-banner" class="maintenance-banner hidden w-full max-w-4xl p-4 rounded-lg mb-4 text-center font-bold slide-in-right">
-  <i class="fas fa-tools mr-2"></i> Server sedang dalam maintenance (18.00 WIB - selesai)
-</div>
-
 <!-- Main Content -->
-<div class="w-full max-w-4xl relative z-10">
-  <div class="text-center mb-6" data-aos="fade-down" data-aos-duration="800">
-    <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400 neon-glow inline-block px-4 py-2 rounded-xl">
+<div class="container w-full max-w-4xl mx-auto mt-8 relative z-10 mb-12">
+  <!-- Maintenance Banner -->
+  <div id="maintenance-banner" class="maintenance-banner hidden w-full p-4 rounded-lg mb-6 text-center font-bold animate-slideIn holographic-effect">
+    <i class="fas fa-tools mr-2"></i> Server sedang dalam maintenance (18.00 WIB - selesai)
+  </div>
+
+  <div class="text-center mb-8" data-aos="fade-down">
+    <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400 inline-block px-4 py-2 rounded-xl glitch-effect" data-text="MotionLife Server Monitor">
       MotionLife Server Monitor
     </h1>
-    <p class="text-gray-300 mt-2" data-aos="fade-up" data-aos-delay="200">Pantau pemain secara real-time</p>
+    <p class="text-gray-300 mt-3 terminal-text" data-aos="fade-up">Real-time player monitoring system</p>
   </div>
 
   <!-- Server Status Card -->
-  <div class="server-card p-5 rounded-xl mb-5 shadow-lg glass-effect" data-aos="zoom-in" data-aos-delay="300">
+  <div class="server-card p-6 rounded-xl mb-6 glass-effect cyber-border scanline" data-aos="zoom-in">
     <div class="flex flex-wrap justify-between items-center">
       <div class="flex items-center">
-        <div class="w-3 h-3 rounded-full bg-green-400 mr-2 neon-glow"></div>
+        <div class="w-3 h-3 rounded-full bg-green-400 mr-3 animate-pulse-strong"></div>
         <div class="text-lg">Status: <span id="server-status" class="text-green-400 font-bold">Online</span></div>
       </div>
       <div class="text-lg">Pemain: <span id="online-count" class="text-green-400 font-bold">0</span>/<span id="max-players" class="text-gray-400">32</span></div>
@@ -261,48 +431,61 @@
     </div>
     
     <!-- Maintenance Status -->
-    <div id="maintenance-status" class="mt-3 p-3 bg-yellow-400/10 rounded-lg text-center hidden slide-in-right">
+    <div id="maintenance-status" class="mt-4 p-3 bg-yellow-400/10 rounded-lg text-center hidden animate-slideIn">
       <i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>
       <span class="text-yellow-400">Server dalam maintenance (18.00 WIB - selesai)</span>
     </div>
   </div>
 
   <!-- Search Bar -->
-  <div class="relative mb-4" data-aos="fade-up" data-aos-delay="400">
+  <div class="relative mb-6" data-aos="fade-up">
     <input type="text" id="search" placeholder="Cari player..." 
-      class="w-full p-3 rounded-xl glass-effect border border-gray-700 focus:border-green-400 focus:outline-none text-white pl-10 focus:neon-glow transition-all duration-300">
-    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+      class="w-full p-4 rounded-xl glass-effect border border-gray-700 focus:border-green-400 focus:outline-none text-white pl-12 terminal-text focus:animate-glow transition-all duration-300">
+    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
   </div>
 
   <!-- Player List Header -->
-  <div class="grid grid-cols-12 gap-2 px-4 py-2 text-gray-400 text-sm font-semibold" data-aos="fade-in" data-aos-delay="500">
+  <div class="grid grid-cols-12 gap-2 px-4 py-3 text-gray-400 text-sm font-semibold mb-2 glass-effect rounded-xl" data-aos="fade-in">
     <div class="col-span-1 text-center">ID</div>
     <div class="col-span-7">Nama Player</div>
     <div class="col-span-4 text-center">Ping</div>
   </div>
 
   <!-- Player List -->
-  <div id="player-list" class="server-card p-4 rounded-xl shadow-lg grid grid-cols-1 gap-2 max-h-[500px] overflow-y-auto custom-scrollbar glass-effect" data-aos="fade-in" data-aos-delay="600"></div>
+  <div id="player-list" class="server-card p-4 rounded-xl grid grid-cols-1 gap-3 max-h-[500px] overflow-y-auto custom-scrollbar glass-effect pixel-corners mb-6"></div>
 
   <!-- Server Info -->
-  <div id="server-info" class="mt-4 p-4 glass-effect rounded-xl text-sm text-gray-400" data-aos="fade-up" data-aos-delay="700">
-    <div class="flex justify-between items-center">
-      <div>
-        <i class="fas fa-server mr-2"></i>
-        <span id="server-name">Mengambil info server...</span>
+  <div id="server-info" class="p-4 glass-effect rounded-xl text-sm text-gray-400 mt-6 cyber-border" data-aos="fade-up">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-2 md:mb-0">
+        <i class="fas fa-server mr-2 text-green-400"></i>
+        <span id="server-name" class="terminal-text">Mengambil info server...</span>
       </div>
       <div>
-        <i class="fas fa-clock mr-2"></i>
-        <span id="current-time">Loading waktu...</span>
+        <i class="fas fa-clock mr-2 text-green-400"></i>
+        <span id="current-time" class="terminal-text">Loading waktu...</span>
       </div>
     </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="text-center text-gray-500 text-xs mt-8 pt-4 border-t border-gray-800">
+    <p>MotionLife Server Monitor &copy; 2023 - Real-time Tracking System</p>
+    <p class="mt-1">Status: <span class="text-green-400" id="connection-status">Connected</span> | Version: 2.1.0</p>
   </div>
 </div>
 
 <!-- Dark Mode Toggle -->
 <div class="fixed bottom-4 right-4 z-20">
-  <button id="dark-mode-toggle" class="p-3 rounded-full glass-effect shadow-lg hover:neon-glow transition-all duration-300">
+  <button id="dark-mode-toggle" class="p-3 rounded-full glass-effect shadow-lg hover:animate-glow transition-all duration-300 cyber-button">
     <i class="fas fa-moon text-yellow-400"></i>
+  </button>
+</div>
+
+<!-- Audio Toggle -->
+<div class="fixed bottom-4 left-4 z-20">
+  <button id="audio-toggle" class="p-3 rounded-full glass-effect shadow-lg hover:animate-glow transition-all duration-300 cyber-button">
+    <i class="fas fa-volume-up text-green-400"></i>
   </button>
 </div>
 
@@ -352,6 +535,43 @@ particlesJS('particles-js', {
   retina_detect: true
 });
 
+// Matrix Rain Effect
+const matrixCanvas = document.getElementById('matrixRain');
+const ctx = matrixCanvas.getContext('2d');
+
+matrixCanvas.width = window.innerWidth;
+matrixCanvas.height = window.innerHeight;
+
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%&^*@#';
+const fontSize = 14;
+const columns = matrixCanvas.width / fontSize;
+const drops = [];
+
+for (let i = 0; i < columns; i++) {
+  drops[i] = 1;
+}
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.05)';
+  ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+  
+  ctx.fillStyle = '#10B981';
+  ctx.font = `${fontSize}px monospace`;
+  
+  for (let i = 0; i < drops.length; i++) {
+    const text = characters.charAt(Math.floor(Math.random() * characters.length));
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    
+    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+    
+    drops[i]++;
+  }
+}
+
+let matrixInterval = setInterval(drawMatrix, 50);
+
 // Fungsi untuk mencari server ID MotionLife
 async function findMotionLifeServer() {
   try {
@@ -398,7 +618,9 @@ const currentTimeEl = document.getElementById("current-time");
 const maintenanceBanner = document.getElementById("maintenance-banner");
 const maintenanceStatus = document.getElementById("maintenance-status");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
+const audioToggle = document.getElementById("audio-toggle");
 const toast = document.getElementById("toast");
+const connectionStatus = document.getElementById("connection-status");
 
 // Fungsi untuk mendapatkan kelas warna berdasarkan nilai ping
 function getPingColorClass(ping) {
@@ -477,6 +699,23 @@ function toggleDarkMode() {
 // Event listener untuk dark mode toggle
 darkModeToggle.addEventListener('click', toggleDarkMode);
 
+// Audio toggle
+let audioEnabled = false;
+audioToggle.addEventListener('click', function() {
+  audioEnabled = !audioEnabled;
+  const icon = audioToggle.querySelector('i');
+  
+  if (audioEnabled) {
+    icon.classList.remove('fa-volume-up');
+    icon.classList.add('fa-volume-mute');
+    clearInterval(matrixInterval);
+  } else {
+    icon.classList.remove('fa-volume-mute');
+    icon.classList.add('fa-volume-up');
+    matrixInterval = setInterval(drawMatrix, 50);
+  }
+});
+
 // Tilt effect untuk elemen kartu
 function initTiltEffect() {
   const cards = document.querySelectorAll('.server-card');
@@ -514,6 +753,8 @@ async function fetchData() {
         // Tampilkan info server
         serverNameEl.textContent = serverInfo.data.Data.hostname;
         updateServerInfo(serverInfo.data);
+        connectionStatus.textContent = "Connected";
+        connectionStatus.classList.add("text-green-400");
       } else {
         throw new Error("Server MotionLife tidak ditemukan");
       }
@@ -564,14 +805,14 @@ async function fetchData() {
         const pingColorClass = getPingColorClass(ping);
         
         const div = document.createElement("div");
-        div.className = "grid grid-cols-12 gap-2 bg-gray-700 p-3 rounded-lg items-center slide-in-right";
+        div.className = "grid grid-cols-12 gap-2 bg-gray-800/50 p-3 rounded-lg items-center glass-effect";
         div.style.animationDelay = `${index * 0.05}s`;
         div.innerHTML = `
           <div class="col-span-1 text-center text-gray-400">${player.id}</div>
-          <div class="col-span-7 truncate">${player.name}</div>
+          <div class="col-span-7 truncate terminal-text">${player.name}</div>
           <div class="col-span-4 text-center">
             <span class="${pingColorClass} ping-indicator"></span>
-            <span>${ping}ms</span>
+            <span class="terminal-text">${ping}ms</span>
           </div>
         `;
         playerListEl.appendChild(div);
@@ -590,6 +831,9 @@ async function fetchData() {
   } catch (error) {
     console.error("Gagal mengambil data:", error);
     loadingScreen.querySelector('p').textContent = "Error: " + error.message;
+    connectionStatus.textContent = "Disconnected";
+    connectionStatus.classList.remove("text-green-400");
+    connectionStatus.classList.add("text-red-400");
     
     // Coba lagi dalam 10 detik jika server ID tidak ditemukan
     setTimeout(() => {
@@ -629,7 +873,7 @@ document.getElementById("search").addEventListener("input", function() {
     const playerName = player.querySelector('.truncate').textContent.toLowerCase();
     if (playerName.includes(filter)) {
       player.style.display = "grid";
-      player.classList.add('zoom-in');
+      player.classList.add('animate-fadeIn');
     } else {
       player.style.display = "none";
     }
@@ -639,6 +883,12 @@ document.getElementById("search").addEventListener("input", function() {
 // Smooth scroll to top ketika halaman dimuat
 window.addEventListener('load', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Resize handler untuk matrix rain
+window.addEventListener('resize', function() {
+  matrixCanvas.width = window.innerWidth;
+  matrixCanvas.height = window.innerHeight;
 });
 
 // Inisialisasi
