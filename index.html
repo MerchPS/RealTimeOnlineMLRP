@@ -15,27 +15,35 @@
             'fadeIn': 'fadeIn 0.6s ease-in-out forwards',
             'slideIn': 'slideIn 0.5s ease-out forwards',
             'pulse-strong': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'rotate-3d': 'rotate3d 10s linear infinite',
+            'orbit': 'orbit 20s linear infinite',
+            'pulse-neon': 'pulseNeon 3s ease-in-out infinite',
+            'wave': 'wave 2s ease-in-out infinite',
+            'glitch': 'glitch 1s linear infinite',
+            'hover-bounce': 'hoverBounce 1.5s ease-in-out infinite',
+            'spin-slow': 'spinSlow 15s linear infinite',
           },
           keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
-            glow: {
-              '0%': { boxShadow: '0 0 5px #10B981, 0 0 10px #10B981' },
-              '100%': { boxShadow: '0 0 15px #10B981, 0 0 30px #10B981' },
-            },
-            fadeIn: {
-              '0%': { opacity: '0' },
-              '100%': { opacity: '1' },
-            },
-            slideIn: {
-              '0%': { transform: 'translateY(20px)', opacity: '0' },
-              '100%': { transform: 'translateY(0)', opacity: '1' },
-            }
-          }
-        }
-      }
+            float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+            glow: { '0%': { boxShadow: '0 0 5px #10B981, 0 0 10px #10B981' }, '100%': { boxShadow: '0 0 15px #10B981, 0 0 30px #10B981' } },
+            fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideIn: { '0%': { transform: 'translateY(20px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+            rotate3d: { '0%': { transform: 'rotate3d(0, 1, 0, 0deg)' }, '100%': { transform: 'rotate3d(0, 1, 0, 360deg)' } },
+            orbit: { '0%': { transform: 'translateX(0) rotate(0deg)' }, '100%': { transform: 'translateX(200px) rotate(360deg)' } },
+            pulseNeon: { '0%': { boxShadow: '0 0 5px #10B981' }, '50%': { boxShadow: '0 0 20px #10B981, 0 0 40px #10B981' }, '100%': { boxShadow: '0 0 5px #10B981' } },
+            wave: { '0%': { transform: 'scale(1)' }, '50%': { transform: 'scale(1.05)' }, '100%': { transform: 'scale(1)' } },
+            glitch: { '0%': { transform: 'translate(0)' }, '20%': { transform: 'translate(-2px, 2px)' }, '40%': { transform: 'translate(2px, -2px)' }, '60%': { transform: 'translate(-2px, 2px)' }, '80%': { transform: 'translate(2px, -2px)' }, '100%': { transform: 'translate(0)' } },
+            hoverBounce: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-5px)' } },
+            spinSlow: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
+          },
+          colors: {
+            'cyber-green': '#10B981',
+            'cyber-blue': '#3B82F6',
+            'cyber-purple': '#8B5CF6',
+            'holo-gray': '#1e293b',
+          },
+        },
+      },
     }
   </script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -47,10 +55,12 @@
     body {
       margin: 0;
       overflow-x: hidden;
+      overflow-y: auto;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       min-height: 100vh;
       color: white;
+      position: relative;
     }
 
     /* Light mode */
@@ -339,6 +349,7 @@
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.05);
       transition: all 0.2s ease;
+      animation: hoverBounce 1.5s ease-in-out infinite;
     }
 
     .player-card:hover {
@@ -357,6 +368,7 @@
       margin-right: 12px;
       font-weight: bold;
       color: white;
+      animation: spinSlow 15s linear infinite;
     }
 
     .player-info {
@@ -367,11 +379,13 @@
       font-weight: 500;
       margin-bottom: 4px;
       color: white;
+      animation: wave 2s ease-in-out infinite;
     }
 
     .player-id {
       font-size: 12px;
       color: rgba(255, 255, 255, 0.6);
+      animation: fadeIn 2s infinite;
     }
 
     .player-ping {
@@ -379,6 +393,7 @@
       align-items: center;
       font-size: 14px;
       color: rgba(255, 255, 255, 0.7);
+      animation: pulse-neon 3s ease-in-out infinite;
     }
 
     /* Footer styles */
@@ -395,6 +410,7 @@
       z-index: 100;
       box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease;
+      animation: glow 2s ease-in-out infinite;
     }
 
     .footer:hover {
@@ -403,14 +419,16 @@
 
     /* Container padding to avoid footer overlap */
     .container {
-      padding-bottom: 100px; /* Adjusted to footer height */
+      padding-bottom: calc(100px + env(safe-area-inset-bottom)); /* Dynamic padding for footer and safe area */
+      min-height: calc(100vh - 100px);
+      overflow-y: auto;
     }
 
     /* Media Queries */
     @media (max-width: 768px) {
       .container {
         padding: 1rem;
-        padding-bottom: 120px; /* Extra padding for mobile */
+        padding-bottom: calc(120px + env(safe-area-inset-bottom));
       }
 
       .server-card {
@@ -430,13 +448,71 @@
 
     @media (max-width: 480px) {
       .container {
-        padding-bottom: 140px; /* More padding for smaller screens */
+        padding-bottom: calc(140px + env(safe-area-inset-bottom));
       }
 
       .segmented-control label {
         font-size: 0.9rem;
         padding: 8px 10px;
       }
+    }
+
+    /* New 3D and advanced styles */
+    .three-d-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .grid-effect {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+      z-index: -3;
+      animation: gridShift 10s linear infinite;
+    }
+
+    @keyframes gridShift {
+      0% { background-position: 0 0; }
+      100% { background-position: -20px -20px; }
+    }
+
+    .neon-trail {
+      position: absolute;
+      width: 2px;
+      height: 50px;
+      background: linear-gradient(to bottom, #10B981, transparent);
+      animation: trailMove 3s linear infinite;
+    }
+
+    @keyframes trailMove {
+      0% { transform: translateY(-100vh); }
+      100% { transform: translateY(100vh); }
+    }
+
+    .holo-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+      z-index: -2;
+      animation: holoPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes holoPulse {
+      0% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 0.2; }
+      100% { transform: scale(1); opacity: 0.5; }
     }
   </style>
 </head>
@@ -445,6 +521,9 @@
   <!-- Animated Background -->
   <div id="particles-js"></div>
   <canvas id="matrixRain" class="matrix-rain"></canvas>
+  <div class="three-d-container" id="three-d-canvas"></div>
+  <div class="grid-effect"></div>
+  <div class="holo-overlay"></div>
 
   <!-- Loading Screen -->
   <div id="loading-screen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
@@ -472,14 +551,14 @@
     </div>
 
     <div class="text-center mb-8" data-aos="fade-down">
-      <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400 inline-block px-4 py-2 rounded-2xl">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400 inline-block px-4 py-2 rounded-2xl animate-rotate-3d">
         MotionLife Server Monitor
       </h1>
       <p class="text-gray-300 mt-3" data-aos="fade-up">Real-time player monitoring system</p>
     </div>
 
     <!-- Server Status Card -->
-    <div class="ios-glass p-6 rounded-2xl mb-6 server-card" data-aos="zoom-in">
+    <div class="ios-glass p-6 rounded-2xl mb-6 server-card scanline" data-aos="zoom-in">
       <div class="flex flex-wrap justify-between items-center">
         <div class="flex items-center">
           <div class="w-3 h-3 rounded-full bg-green-400 mr-3 animate-pulse-strong"></div>
@@ -497,19 +576,19 @@
     </div>
 
     <!-- Tab Navigation -->
-    <div class="segmented-control mb-6">
+    <div class="segmented-control mb-6 cyber-border">
       <input type="radio" id="tab-players" name="tabs" checked>
-      <label for="tab-players"><i class="fas fa-users mr-2"></i> Players</label>
+      <label for="tab-players" class="animate-wave"><i class="fas fa-users mr-2"></i> Players</label>
       <input type="radio" id="tab-server" name="tabs">
-      <label for="tab-server"><i class="fas fa-server mr-2"></i> Server Info</label>
+      <label for="tab-server" class="animate-wave"><i class="fas fa-server mr-2"></i> Server Info</label>
       <input type="radio" id="tab-settings" name="tabs">
-      <label for="tab-settings"><i class="fas fa-cog mr-2"></i> Settings</label>
+      <label for="tab-settings" class="animate-wave"><i class="fas fa-cog mr-2"></i> Settings</label>
     </div>
 
     <!-- Search Bar -->
     <div class="relative mb-6" data-aos="fade-up">
       <input type="text" id="search" placeholder="Cari player..." 
-        class="w-full p-4 rounded-2xl ios-glass border border-gray-700 focus:border-green-400 focus:outline-none text-white pl-12 focus:animate-glow transition-all duration-300">
+        class="w-full p-4 rounded-2xl ios-glass border border-gray-700 focus:border-green-400 focus:outline-none text-white pl-12 focus:animate-glow transition-all duration-300 cyber-border">
       <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
     </div>
 
@@ -520,7 +599,7 @@
 
     <!-- Server Info Tab Content -->
     <div id="tab-server-content" class="hidden">
-      <div class="ios-glass p-6 rounded-2xl mb-6">
+      <div class="ios-glass p-6 rounded-2xl mb-6 cyber-border">
         <h2 class="text-xl font-bold mb-4 text-green-400">Server Information</h2>
         <div class="space-y-4">
           <div class="flex justify-between">
@@ -542,7 +621,7 @@
         </div>
       </div>
 
-      <div class="ios-glass p-6 rounded-2xl">
+      <div class="ios-glass p-6 rounded-2xl cyber-border">
         <h2 class="text-xl font-bold mb-4 text-green-400">Performance Metrics</h2>
         <div class="space-y-4">
           <div>
@@ -578,7 +657,7 @@
 
     <!-- Settings Tab Content -->
     <div id="tab-settings-content" class="hidden">
-      <div class="ios-glass p-6 rounded-2xl mb-6">
+      <div class="ios-glass p-6 rounded-2xl mb-6 cyber-border">
         <h2 class="text-xl font-bold mb-4 text-green-400">Display Settings</h2>
         <div class="space-y-4">
           <div class="flex justify-between items-center">
@@ -605,7 +684,7 @@
         </div>
       </div>
 
-      <div class="ios-glass p-6 rounded-2xl">
+      <div class="ios-glass p-6 rounded-2xl cyber-border">
         <h2 class="text-xl font-bold mb-4 text-green-400">Notification Settings</h2>
         <div class="space-y-4">
           <div class="flex justify-between items-center">
@@ -652,13 +731,13 @@
   <!-- Floating Action Buttons -->
   <div class="fixed bottom-20 right-4 z-20 flex flex-col space-y-2">
     <div class="relative group">
-      <button id="audio-toggle" class="p-3 rounded-full ios-glass shadow-lg hover:animate-glow transition-all duration-300">
+      <button id="audio-toggle" class="p-3 rounded-full ios-glass shadow-lg hover:animate-glow transition-all duration-300 cyber-button">
         <i class="fas fa-volume-up text-green-400"></i>
       </button>
       <span class="absolute right-14 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity">Toggle Audio</span>
     </div>
     <div class="relative group">
-      <button id="dark-mode-toggle" class="p-3 rounded-full ios-glass shadow-lg hover:animate-glow transition-all duration-300">
+      <button id="dark-mode-toggle" class="p-3 rounded-full ios-glass shadow-lg hover:animate-glow transition-all duration-300 cyber-button">
         <i class="fas fa-moon text-yellow-400"></i>
       </button>
       <span class="absolute right-14 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity">Toggle Dark Mode</span>
@@ -678,7 +757,7 @@
     // Initialize particles.js
     particlesJS('particles-js', {
       particles: {
-        number: { value: 60, density: { enable: true, value_area: 800 } }, // Reduced particle count
+        number: { value: 80, density: { enable: true, value_area: 800 } },
         color: { value: "#10B981" },
         shape: { type: "circle" },
         opacity: { value: 0.5, random: true },
@@ -741,12 +820,11 @@
         if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
-
         drops[i]++;
       }
     }
 
-    let matrixInterval = setInterval(drawMatrix, 60); // Increased interval to 60ms for better performance
+    let matrixInterval = setInterval(drawMatrix, 50);
 
     // Animation toggle
     const animationToggle = document.getElementById('animation-toggle');
@@ -754,9 +832,15 @@
       if (!this.checked) {
         clearInterval(matrixInterval);
         document.getElementById('particles-js').style.display = 'none';
+        document.querySelector('.three-d-container').style.display = 'none';
+        document.querySelector('.grid-effect').style.display = 'none';
+        document.querySelector('.holo-overlay').style.display = 'none';
       } else {
-        matrixInterval = setInterval(drawMatrix, 60);
+        matrixInterval = setInterval(drawMatrix, 50);
         document.getElementById('particles-js').style.display = 'block';
+        document.querySelector('.three-d-container').style.display = 'block';
+        document.querySelector('.grid-effect').style.display = 'block';
+        document.querySelector('.holo-overlay').style.display = 'block';
       }
     });
 
@@ -766,10 +850,53 @@
         document.getElementById('tab-players-content').classList.add('hidden');
         document.getElementById('tab-server-content').classList.add('hidden');
         document.getElementById('tab-settings-content').classList.add('hidden');
-
         document.getElementById(`tab-${this.id.split('-')[1]}-content`).classList.remove('hidden');
       });
     });
+
+    // 3D Scene with Three.js
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('three-d-canvas').appendChild(renderer.domElement);
+
+    const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+    const material = new THREE.MeshPhongMaterial({ color: 0x10B981, specular: 0xffffff, shininess: 100 });
+    const torusKnot = new THREE.Mesh(geometry, material);
+    scene.add(torusKnot);
+
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight.position.set(0, 1, 0);
+    scene.add(directionalLight);
+
+    camera.position.z = 50;
+
+    function animate3D() {
+      requestAnimationFrame(animate3D);
+      torusKnot.rotation.x += 0.01;
+      torusKnot.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    animate3D();
+
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    });
+
+    // Dynamic Neon Trails
+    function createNeonTrail() {
+      const trail = document.createElement('div');
+      trail.className = 'neon-trail';
+      trail.style.left = `${Math.random() * 100}vw`;
+      document.body.appendChild(trail);
+      setTimeout(() => trail.remove(), 3000);
+    }
+    setInterval(createNeonTrail, 200);
 
     // Fungsi untuk mencari server ID MotionLife
     async function findMotionLifeServer() {
@@ -906,7 +1033,7 @@
       } else {
         icon.classList.remove('fa-volume-mute');
         icon.classList.add('fa-volume-up');
-        matrixInterval = setInterval(drawMatrix, 60);
+        matrixInterval = setInterval(drawMatrix, 50);
       }
     });
 
@@ -1044,10 +1171,13 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Resize handler untuk matrix rain
+    // Resize handler untuk matrix rain and 3D
     window.addEventListener('resize', function() {
       matrixCanvas.width = window.innerWidth;
       matrixCanvas.height = window.innerHeight;
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
     });
 
     // Inisialisasi
