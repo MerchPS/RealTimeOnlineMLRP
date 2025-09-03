@@ -40,8 +40,6 @@
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
   /* Base styles */
   body {
@@ -50,6 +48,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     min-height: 100vh;
+    color: white;
   }
   
   /* iOS-inspired design elements */
@@ -126,21 +125,6 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
-  .neon-glow {
-    box-shadow: 0 0 5px #10B981, 0 0 10px #10B981, 0 0 15px #10B981;
-  }
-  
-  .skeleton-loading {
-    background: linear-gradient(90deg, #1F2937 25%, #2D3748 50%, #1F2937 75%);
-    background-size: 200% 100%;
-    animation: loading 1.5s infinite;
-  }
-  
-  @keyframes loading {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
-  
   .gradient-bg {
     background: linear-gradient(-45deg, #0f172a, #111827, #1e293b, #1f2937);
     background-size: 400% 400%;
@@ -168,13 +152,6 @@
   @keyframes blink-caret {
     from, to { border-color: transparent }
     50% { border-color: #10B981; }
-  }
-  
-  #particles-js {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
   }
   
   .toast {
@@ -217,57 +194,6 @@
     position: relative;
     border: 1px solid transparent;
     background-clip: padding-box;
-  }
-  
-  .cyber-border::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    z-index: -1;
-    margin: -2px;
-    border-radius: inherit;
-    background: linear-gradient(45deg, #10B981, #3B82F6, #10B981);
-    animation: border-flow 3s linear infinite;
-    background-size: 200% 200%;
-  }
-  
-  @keyframes border-flow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  
-  .scanline {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .scanline::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 20px;
-    background: linear-gradient(to bottom, rgba(16, 185, 129, 0.3), transparent);
-    animation: scan 2s linear infinite;
-    pointer-events: none;
-  }
-  
-  @keyframes scan {
-    0% { top: -20px; }
-    100% { top: 100%; }
-  }
-  
-  .matrix-rain {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.1;
   }
   
   .terminal-text {
@@ -405,11 +331,7 @@
   }
 </style>
 </head>
-<body class="text-white min-h-screen flex flex-col items-center justify-start p-4 relative overflow-hidden">
-
-<!-- Animated Background -->
-<div id="particles-js"></div>
-<canvas id="matrixRain" class="matrix-rain"></canvas>
+<body class="flex flex-col items-center justify-start p-4 relative overflow-hidden">
 
 <!-- Loading Screen -->
 <div id="loading-screen" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
@@ -432,30 +354,30 @@
 <!-- Main Content -->
 <div class="container w-full max-w-4xl mx-auto mt-8 relative z-10 mb-24">
   <!-- Maintenance Banner -->
-  <div id="maintenance-banner" class="maintenance-banner hidden w-full p-4 rounded-2xl mb-6 text-center font-bold animate-slideIn holographic-effect">
+  <div id="maintenance-banner" class="maintenance-banner hidden w-full p-4 rounded-2xl mb-6 text-center font-bold holographic-effect">
     <i class="fas fa-tools mr-2"></i> Server sedang dalam maintenance (18.00 WIB - selesai)
   </div>
 
-  <div class="text-center mb-8" data-aos="fade-down">
+  <div class="text-center mb-8">
     <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400 inline-block px-4 py-2 rounded-2xl">
       MotionLife Server Monitor
     </h1>
-    <p class="text-gray-300 mt-3" data-aos="fade-up">Real-time player monitoring system</p>
+    <p class="text-gray-300 mt-3">Real-time player monitoring system</p>
   </div>
 
   <!-- Server Status Card -->
-  <div class="ios-glass p-6 rounded-2xl mb-6" data-aos="zoom-in">
+  <div class="ios-glass p-6 rounded-2xl mb-6">
     <div class="flex flex-wrap justify-between items-center">
       <div class="flex items-center">
-        <div class="w-3 h-3 rounded-full bg-green-400 mr-3 animate-pulse-strong"></div>
+        <div class="w-3 h-3 rounded-full bg-green-400 mr-3 animate-pulse"></div>
         <div class="text-lg">Status: <span id="server-status" class="text-green-400 font-bold">Online</span></div>
       </div>
-      <div class="text-lg">Pemain: <span id="online-count" class="text-green-400 font-bold">0</span>/<span id="max-players" class="text-gray-400">32</span></div>
-      <div class="text-sm text-gray-400">Refresh dalam: <span id="refresh-timer" class="font-bold">15</span>s</div>
+      <div class="text-lg">Pemain: <span id="online-count" class="text-green-400 font-bold">491</span>/<span id="max-players" class="text-gray-400">1800</span></div>
+      <div class="text-sm text-gray-400">Refresh dalam: <span id="refresh-timer" class="font-bold">2</span>s</div>
     </div>
     
     <!-- Maintenance Status -->
-    <div id="maintenance-status" class="mt-4 p-3 bg-yellow-400/10 rounded-lg text-center hidden animate-slideIn">
+    <div id="maintenance-status" class="mt-4 p-3 bg-yellow-400/10 rounded-lg text-center hidden">
       <i class="fas fa-exclamation-triangle text-yellow-400 mr-2"></i>
       <span class="text-yellow-400">Server dalam maintenance (18.00 WIB - selesai)</span>
     </div>
@@ -474,16 +396,52 @@
   </div>
 
   <!-- Search Bar -->
-  <div class="relative mb-6" data-aos="fade-up">
+  <div class="relative mb-6">
     <input type="text" id="search" placeholder="Cari player..." 
-      class="w-full p-4 rounded-2xl ios-glass border border-gray-700 focus:border-green-400 focus:outline-none text-white pl-12 focus:animate-glow transition-all duration-300">
+      class="w-full p-4 rounded-2xl ios-glass border border-gray-700 focus:border-green-400 focus:outline-none text-white pl-12 transition-all duration-300">
     <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
   </div>
 
   <!-- Players Tab Content -->
   <div id="tab-players-content">
     <!-- Player List -->
-    <div id="player-list" class="rounded-2xl overflow-y-auto custom-scrollbar max-h-[500px] mb-6"></div>
+    <div id="player-list" class="rounded-2xl overflow-y-auto custom-scrollbar max-h-[500px] mb-6">
+      <!-- Example player cards -->
+      <div class="player-card">
+        <div class="player-avatar">JD</div>
+        <div class="player-info">
+          <div class="player-name">John_Doe</div>
+          <div class="player-id">ID: 123</div>
+        </div>
+        <div class="player-ping">
+          <span class="ping-excellent ping-indicator"></span>
+          <span>32ms</span>
+        </div>
+      </div>
+      <div class="player-card">
+        <div class="player-avatar">JS</div>
+        <div class="player-info">
+          <div class="player-name">Jane_Smith</div>
+          <div class="player-id">ID: 456</div>
+        </div>
+        <div class="player-ping">
+          <span class="ping-good ping-indicator"></span>
+          <span>78ms</span>
+        </div>
+      </div>
+      <div class="player-card">
+        <div class="player-avatar">RJ</div>
+        <div class="player-info">
+          <div class="player-name">Robert_Johnson</div>
+          <div class="player-id">ID: 789</div>
+        </div>
+        <div class="player-ping">
+          <span class="ping-medium ping-indicator"></span>
+          <span>145ms</span>
+        </div>
+      </div>
+      <!-- More players would be loaded here -->
+    </div>
   </div>
 
   <!-- Server Info Tab Content -->
@@ -493,7 +451,7 @@
       <div class="space-y-4">
         <div class="flex justify-between">
           <span class="text-gray-400">Server Name:</span>
-          <span id="server-name" class="font-medium">Mengambil info server...</span>
+          <span id="server-name" class="font-medium">MotionLife RP Server</span>
         </div>
         <div class="flex justify-between">
           <span class="text-gray-400">Game Mode:</span>
@@ -607,7 +565,7 @@
   <div class="flex justify-between items-center text-sm">
     <div>
       <i class="fas fa-clock mr-2 text-green-400"></i>
-      <span id="current-time">Loading waktu...</span>
+      <span id="current-time">09:30:00 WIB</span>
     </div>
     <div>
       <span class="text-gray-400">MotionLife Monitor &copy; 2023</span>
@@ -619,97 +577,15 @@
 
 <!-- Floating Action Buttons -->
 <div class="fixed bottom-20 right-4 z-20 flex flex-col space-y-4">
-  <button id="audio-toggle" class="p-3 rounded-full ios-glass shadow-lg hover:animate-glow transition-all duration-300">
+  <button id="audio-toggle" class="p-3 rounded-full ios-glass shadow-lg transition-all duration-300">
     <i class="fas fa-volume-up text-green-400"></i>
   </button>
-  <button id="dark-mode-toggle" class="p-3 rounded-full ios-glass shadow-lg hover:animate-glow transition-all duration-300">
+  <button id="dark-mode-toggle" class="p-3 rounded-full ios-glass shadow-lg transition-all duration-300">
     <i class="fas fa-moon text-yellow-400"></i>
   </button>
 </div>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script>
-// Initialize AOS
-AOS.init({
-  duration: 800,
-  once: true,
-  easing: 'ease-out-quart'
-});
-
-// Initialize particles.js
-particlesJS('particles-js', {
-  particles: {
-    number: { value: 80, density: { enable: true, value_area: 800 } },
-    color: { value: "#10B981" },
-    shape: { type: "circle" },
-    opacity: { value: 0.5, random: true },
-    size: { value: 3, random: true },
-    line_linked: {
-      enable: true,
-      distance: 150,
-      color: "#10B981",
-      opacity: 0.4,
-      width: 1
-    },
-    move: {
-      enable: true,
-      speed: 2,
-      direction: "none",
-      random: true,
-      straight: false,
-      out_mode: "out",
-      bounce: false
-    }
-  },
-  interactivity: {
-    detect_on: "canvas",
-    events: {
-      onhover: { enable: true, mode: "grab" },
-      onclick: { enable: true, mode: "push" },
-      resize: true
-    }
-  },
-  retina_detect: true
-});
-
-// Matrix Rain Effect
-const matrixCanvas = document.getElementById('matrixRain');
-const ctx = matrixCanvas.getContext('2d');
-
-matrixCanvas.width = window.innerWidth;
-matrixCanvas.height = window.innerHeight;
-
-const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%&^*@#';
-const fontSize = 14;
-const columns = matrixCanvas.width / fontSize;
-const drops = [];
-
-for (let i = 0; i < columns; i++) {
-  drops[i] = 1;
-}
-
-function drawMatrix() {
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.05)';
-  ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-  
-  ctx.fillStyle = '#10B981';
-  ctx.font = `${fontSize}px monospace`;
-  
-  for (let i = 0; i < drops.length; i++) {
-    const text = characters.charAt(Math.floor(Math.random() * characters.length));
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-    
-    if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
-      drops[i] = 0;
-    }
-    
-    drops[i]++;
-  }
-}
-
-let matrixInterval = setInterval(drawMatrix, 50);
-
 // Tab Navigation
 document.querySelectorAll('.segmented-control input[type="radio"]').forEach(radio => {
   radio.addEventListener('change', function() {
@@ -720,273 +596,6 @@ document.querySelectorAll('.segmented-control input[type="radio"]').forEach(radi
     document.getElementById(`tab-${this.id.split('-')[1]}-content`).classList.remove('hidden');
   });
 });
-
-// Fungsi untuk mencari server ID MotionLife
-async function findMotionLifeServer() {
-  try {
-    // Daftar kemungkinan server ID untuk MotionLife (bisa ditambah sesuai kebutuhan)
-    const possibleServerIds = ["5j433z", "motionlife", "motionliferp", "mlrp"];
-    let serverData = null;
-    
-    for (const id of possibleServerIds) {
-      try {
-        const response = await fetch(`https://servers-frontend.fivem.net/api/servers/single/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          // Cek apakah server ini adalah MotionLife (dengan memeriksa nama)
-          if (data.Data && data.Data.hostname && data.Data.hostname.toLowerCase().includes("motionlife")) {
-            serverData = { id: id, data: data };
-            break;
-          }
-        }
-      } catch (e) {
-        console.log(`Server ID ${id} tidak valid:`, e);
-      }
-    }
-    
-    return serverData;
-  } catch (error) {
-    console.error("Error mencari server:", error);
-    return null;
-  }
-}
-
-const refreshInterval = 15; // Detik
-let countdown = refreshInterval;
-let currentServerId = null;
-
-// Ambil elemen
-const loadingScreen = document.getElementById("loading-screen");
-const onlineCountEl = document.getElementById("online-count");
-const maxPlayersEl = document.getElementById("max-players");
-const refreshTimerEl = document.getElementById("refresh-timer");
-const playerListEl = document.getElementById("player-list");
-const serverNameEl = document.getElementById("server-name");
-const serverStatusEl = document.getElementById("server-status");
-const currentTimeEl = document.getElementById("current-time");
-const maintenanceBanner = document.getElementById("maintenance-banner");
-const maintenanceStatus = document.getElementById("maintenance-status");
-const darkModeToggle = document.getElementById("dark-mode-toggle");
-const audioToggle = document.getElementById("audio-toggle");
-const toast = document.getElementById("toast");
-const connectionStatus = document.getElementById("connection-status");
-
-// Fungsi untuk mendapatkan kelas warna berdasarkan nilai ping
-function getPingColorClass(ping) {
-  if (ping < 50) return "ping-excellent";
-  if (ping < 100) return "ping-good";
-  if (ping < 200) return "ping-medium";
-  return "ping-poor";
-}
-
-// Fungsi untuk memeriksa apakah server sedang maintenance
-function checkMaintenanceStatus(onlineCount) {
-  const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const currentTime = hours + minutes / 60;
-  
-  // Waktu maintenance: 18.00 WIB (11.00 UTC) sampai waktu tidak tentu
-  const maintenanceStart = 11; // 18.00 WIB = 11.00 UTC
-  let isMaintenanceTime = currentTime >= maintenanceStart;
-  
-  // Jika sudah lewat dari jam maintenance, periksa apakah online count > 1
-  if (isMaintenanceTime && onlineCount > 5) {
-    isMaintenanceTime = false;
-  }
-  
-  return isMaintenanceTime;
-}
-
-// Fungsi untuk memperbarui waktu
-function updateCurrentTime() {
-  const now = new Date();
-  const options = { 
-    timeZone: 'Asia/Jakarta', 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit',
-    hour12: false 
-  };
-  const timeString = now.toLocaleTimeString('id-ID', options);
-  currentTimeEl.textContent = timeString + ' WIB';
-}
-
-// Fungsi untuk menampilkan toast notifikasi
-function showToast(message) {
-  toast.innerHTML = `<i class="fas fa-sync-alt mr-2"></i> ${message}`;
-  toast.classList.add('show');
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3000);
-}
-
-// Fungsi untuk toggle dark mode
-function toggleDarkMode() {
-  document.body.classList.toggle('light-mode');
-  const icon = darkModeToggle.querySelector('i');
-  
-  if (document.body.classList.contains('light-mode')) {
-    document.body.style.background = '#f8fafc';
-    document.body.style.color = '#1f2937';
-    icon.classList.remove('fa-moon');
-    icon.classList.add('fa-sun');
-    icon.classList.remove('text-yellow-400');
-    icon.classList.add('text-yellow-500');
-  } else {
-    document.body.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)';
-    document.body.style.color = 'white';
-    icon.classList.remove('fa-sun');
-    icon.classList.add('fa-moon');
-    icon.classList.remove('text-yellow-500');
-    icon.classList.add('text-yellow-400');
-  }
-}
-
-// Event listener untuk dark mode toggle
-darkModeToggle.addEventListener('click', toggleDarkMode);
-
-// Audio toggle
-let audioEnabled = false;
-audioToggle.addEventListener('click', function() {
-  audioEnabled = !audioEnabled;
-  const icon = audioToggle.querySelector('i');
-  
-  if (audioEnabled) {
-    icon.classList.remove('fa-volume-up');
-    icon.classList.add('fa-volume-mute');
-    clearInterval(matrixInterval);
-  } else {
-    icon.classList.remove('fa-volume-mute');
-    icon.classList.add('fa-volume-up');
-    matrixInterval = setInterval(drawMatrix, 50);
-  }
-});
-
-async function fetchData() {
-  try {
-    // Jika belum memiliki server ID, cari dulu
-    if (!currentServerId) {
-      loadingScreen.querySelector('p').textContent = "Mencari server MotionLife...";
-      const serverInfo = await findMotionLifeServer();
-      
-      if (serverInfo) {
-        currentServerId = serverInfo.id;
-        // Tampilkan info server
-        serverNameEl.textContent = serverInfo.data.Data.hostname;
-        updateServerInfo(serverInfo.data);
-        connectionStatus.textContent = "Connected";
-        connectionStatus.classList.add("text-green-400");
-      } else {
-        throw new Error("Server MotionLife tidak ditemukan");
-      }
-    }
-    
-    const apiURL = `https://servers-frontend.fivem.net/api/servers/single/${currentServerId}`;
-    const res = await fetch(apiURL);
-    const data = await res.json();
-
-    // Update data
-    const players = data.Data.players;
-    const onlineCount = data.Data.clients;
-    onlineCountEl.textContent = onlineCount;
-    
-    // Update info server
-    updateServerInfo(data);
-    
-    // Periksa status maintenance
-    const isMaintenance = checkMaintenanceStatus(onlineCount);
-    
-    if (isMaintenance) {
-      maintenanceBanner.classList.remove("hidden");
-      maintenanceStatus.classList.remove("hidden");
-      serverStatusEl.textContent = "Maintenance";
-      serverStatusEl.classList.remove("text-green-400");
-      serverStatusEl.classList.add("text-yellow-400");
-    } else {
-      maintenanceBanner.classList.add("hidden");
-      maintenanceStatus.classList.add("hidden");
-      serverStatusEl.textContent = "Online";
-      serverStatusEl.classList.remove("text-yellow-400");
-      serverStatusEl.classList.add("text-green-400");
-    }
-
-    // Render list pemain
-    playerListEl.innerHTML = "";
-    
-    if (players.length === 0) {
-      playerListEl.innerHTML = `
-        <div class="text-center py-8 text-gray-400 ios-glass" data-aos="zoom-in">
-          <i class="fas fa-users-slash text-4xl mb-2"></i>
-          <p>Tidak ada pemain online</p>
-        </div>
-      `;
-    } else {
-      players.forEach((player, index) => {
-        const ping = player.ping || 0;
-        const pingColorClass = getPingColorClass(ping);
-        const initials = player.name.split(' ').map(n => n[0]).join('').toUpperCase();
-        
-        const div = document.createElement("div");
-        div.className = "player-card";
-        div.style.animationDelay = `${index * 0.05}s`;
-        div.innerHTML = `
-          <div class="player-avatar">${initials.substring(0, 2)}</div>
-          <div class="player-info">
-            <div class="player-name">${player.name}</div>
-            <div class="player-id">ID: ${player.id}</div>
-          </div>
-          <div class="player-ping">
-            <span class="${pingColorClass} ping-indicator"></span>
-            <span>${ping}ms</span>
-          </div>
-        `;
-        playerListEl.appendChild(div);
-      });
-    }
-
-    // Hilangkan loading screen setelah load pertama
-    loadingScreen.style.display = "none";
-    
-    // Tampilkan toast notifikasi
-    showToast('Data server diperbarui');
-
-  } catch (error) {
-    console.error("Gagal mengambil data:", error);
-    loadingScreen.querySelector('p').textContent = "Error: " + error.message;
-    connectionStatus.textContent = "Disconnected";
-    connectionStatus.classList.remove("text-green-400");
-    connectionStatus.classList.add("text-red-400");
-    
-    // Coba lagi dalam 10 detik jika server ID tidak ditemukan
-    setTimeout(() => {
-      currentServerId = null;
-      fetchData();
-    }, 10000);
-  }
-}
-
-function updateServerInfo(data) {
-  if (data && data.Data) {
-    serverNameEl.textContent = data.Data.hostname;
-    maxPlayersEl.textContent = data.Data.sv_maxclients || 32;
-  }
-}
-
-function startCountdown() {
-  countdown = refreshInterval;
-  refreshTimerEl.textContent = countdown;
-  const timer = setInterval(() => {
-    countdown--;
-    refreshTimerEl.textContent = countdown;
-    if (countdown <= 0) {
-      clearInterval(timer);
-      fetchData();
-      startCountdown();
-    }
-  }, 1000);
-}
 
 // Fitur Search
 document.getElementById("search").addEventListener("input", function() {
@@ -1003,22 +612,30 @@ document.getElementById("search").addEventListener("input", function() {
   });
 });
 
-// Smooth scroll to top ketika halaman dimuat
-window.addEventListener('load', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
+// Countdown timer
+let countdown = 2;
+const refreshTimerEl = document.getElementById("refresh-timer");
 
-// Resize handler untuk matrix rain
-window.addEventListener('resize', function() {
-  matrixCanvas.width = window.innerWidth;
-  matrixCanvas.height = window.innerHeight;
-});
+function startCountdown() {
+  const timer = setInterval(() => {
+    countdown--;
+    refreshTimerEl.textContent = countdown;
+    if (countdown <= 0) {
+      clearInterval(timer);
+      countdown = 15;
+      // fetchData() would be called here
+      startCountdown();
+    }
+  }, 1000);
+}
 
-// Inisialisasi
-fetchData();
+// Hide loading screen after 2 seconds
+setTimeout(() => {
+  document.getElementById("loading-screen").style.display = "none";
+}, 2000);
+
+// Start countdown
 startCountdown();
-setInterval(updateCurrentTime, 1000);
-updateCurrentTime();
 </script>
 
 </body>
